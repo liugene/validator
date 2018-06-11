@@ -1,0 +1,20 @@
+{
+  "name": "linkphp/validator",
+  "type": "library",
+  "description": "php validator",
+  "keywords": ["validator","php validator 验证器 "],
+  "authors": [
+    {
+      "name": "liugene",
+      "email": "liujun2199@vip.qq.com"
+    }
+  ],
+  "require": {
+    "php": "^5.5 || ^7.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "linkphp\\validator\\": "src"
+    }
+  }
+}
