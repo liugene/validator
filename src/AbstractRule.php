@@ -5,12 +5,12 @@ namespace linkphp\validator;
 abstract class AbstractRule
 {
 
-    public static $input;
+    public $input;
 
-    public static $length;
+    public $length;
 
-    public static $param;
+    public $param;
 
-    abstract static public function validate();
+    abstract public function validate();
 
 }

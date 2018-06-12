@@ -46,15 +46,15 @@ class Validator
         return $this;
     }
 
-    public function withValidator($validator, $input = null, $param = null, $error_message = null)
+    public function withValidator($input, $validator = null, $param = null, $error_message = null)
     {
         if($validator instanceof Closure){
-            call_user_func($validator);
+            call_user_func($validator,$this, $input);
             return $this;
         }
 
-        if(is_array($validator)){
-            $this->rule = array_merge($this->rule, $validator);
+        if(is_array($input)){
+            $this->rule = array_merge($this->rule, $input);
             return $this;
         }
 
@@ -72,26 +72,58 @@ class Validator
      */
     public function check()
     {
-        foreach ($this->data as $key => $val){
-            if(isset($this->data[$key])){
-                $class = ucfirst($this->rule[$key]['class']);
+        if(is_array($this->data)){
+            foreach ($this->data as $key => $val){
+                if(isset($this->data[$key])){
+                    $class = "\\linkphp\\validator\\rule\\" . ucfirst($this->rule[$key]['rule']['class']);
+                    if($class && is_string($class) && class_exists($class) &&
+                        is_subclass_of($class, "\\linkphp\\validator\\AbstractRule")){
+                        $ruleValidator = new $class;
+                        $ruleValidator->input = $this->data;
+                        if(isset($this->rule[$key]['rule']['class']['param']) &&
+                            !empty($this->rule[$key]['rule']['class']['param'])){
+                            foreach ($this->rule[$key]['rule']['class']['param'] as $method => $value){
+                                $ruleValidator->$method = $value;
+                            }
+                        }
+                    } else {
+                        $class = "\\linkphp\\validator\\rule\\" . $class;
+                        $ruleValidator = new $class;
+                        $ruleValidator->input = $this->data;
+                        foreach ($this->rule[$key]['rule']['class']['param'] as $method => $value){
+                            $ruleValidator->$method = $value;
+                        }
+                    }
+                    if(!$ruleValidator->validate()){
+                        $this->error[$key] = $this->rule[$key]['errorMessage'];
+                        return false;
+                    }
+                }
+            }
+        }
+        if(is_string($this->data) && !empty($this->data)){
+            foreach ($this->rule as $key => $val){
+                $class = "\\linkphp\\validator\\rule\\" . ucfirst($this->rule[$key]['rule']['class']);
                 if($class && is_string($class) && class_exists($class) &&
                     is_subclass_of($class, "\\linkphp\\validator\\AbstractRule")){
                     $ruleValidator = new $class;
-                    $ruleValidator->input = $this->data[$key];
-                    foreach ($this->rule[$key]['class']['param'] as $method => $value){
-                        $ruleValidator->$method = $value;
+                    $ruleValidator->input = $this->data;
+                    if(isset($this->rule[$key]['rule']['class']['param']) &&
+                        !empty($this->rule[$key]['rule']['class']['param'])){
+                        foreach ($this->rule[$key]['rule']['class']['param'] as $method => $value){
+                            $ruleValidator->$method = $value;
+                        }
                     }
                 } else {
                     $class = "\\linkphp\\validator\\rule\\" . $class;
                     $ruleValidator = new $class;
-                    $ruleValidator->input = $this->data[$key];
-                    foreach ($this->rule[$key]['class']['param'] as $method => $value){
+                    $ruleValidator->input = $this->data;
+                    foreach ($this->rule[$key]['rule']['class']['param'] as $method => $value){
                         $ruleValidator->$method = $value;
                     }
                 }
-                if(!$ruleValidator->validator()){
-                    $this->error[$key] = $this->data[$key]['errorMessage'];
+                if(!$ruleValidator->validate()){
+                    $this->error[$key] = $this->rule[$key]['errorMessage'];
                     return false;
                 }
             }
