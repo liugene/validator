@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class FloatInput extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return is_float(self::$input) || (self::$input == (string)(float)self::$input);
+        return is_float($this->input) || ($this->input == (string)(float)$this->input);
     }
 
 }

@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class Required extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return (!is_null(self::$input) && (trim(self::$input) != ''));
+        return (!is_null($this->input) && (trim($this->input) != ''));
     }
 
 }

@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class Alpha extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return (preg_match("#^[a-zA-ZÀ-ÿ]+$#", self::$input) == 1);
+        return (preg_match("#^[a-zA-ZÀ-ÿ]+$#", $this->input) == 1);
     }
 
 }

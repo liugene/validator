@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class Email extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return filter_var(self::$input, FILTER_VALIDATE_EMAIL);
+        return filter_var($this->input, FILTER_VALIDATE_EMAIL);
     }
 
 }

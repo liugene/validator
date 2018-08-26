@@ -74,12 +74,12 @@ class Validator
     {
         if(is_array($this->data)){
             foreach ($this->data as $key => $val){
-                if(isset($this->data[$key])){
+                if(isset($this->rule[$key])){
                     $class = "\\linkphp\\validator\\rule\\" . ucfirst($this->rule[$key]['rule']['class']);
                     if($class && is_string($class) && class_exists($class) &&
                         is_subclass_of($class, "\\linkphp\\validator\\AbstractRule")){
                         $ruleValidator = new $class;
-                        $ruleValidator->input = $this->data;
+                        $ruleValidator->input = $this->data[$key];
                         if(isset($this->rule[$key]['rule']['class']['param']) &&
                             !empty($this->rule[$key]['rule']['class']['param'])){
                             foreach ($this->rule[$key]['rule']['class']['param'] as $method => $value){

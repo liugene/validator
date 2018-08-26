@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class Integer extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return is_int(self::$input) || (self::$input == (string)(int)self::$input);
+        return is_int($this->input) || ($this->input == (string)(int)$this->input);
     }
 
 }

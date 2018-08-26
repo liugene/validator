@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class ExactLength extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return (strlen(self::$input) == self::$length);
+        return (strlen($this->input) == $this->length);
     }
 
 }

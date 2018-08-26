@@ -7,9 +7,9 @@ use linkphp\validator\AbstractRule;
 class Equals extends AbstractRule
 {
 
-    public static function validate()
+    public function validate()
     {
-        return (self::$input == self::$param);
+        return ($this->input == $this->param);
     }
 
 }
