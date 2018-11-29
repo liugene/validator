@@ -14,7 +14,7 @@
   },
   "autoload": {
     "psr-4": {
-      "linkphp\\validator\\": "src"
+      "link\\validator\\": "src"
     }
   }
 }
